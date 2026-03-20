@@ -72,8 +72,13 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "timepass.html"));
 });
 
-app.listen(PORT, () => {
-  console.log(`✓ Server running at http://localhost:${PORT}`);
-  console.log(`✓ Quiz: http://localhost:${PORT}`);
-  console.log(`✓ Admin: http://localhost:${PORT}/admin`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`✓ Server running at http://localhost:${PORT}`);
+    console.log(`✓ Quiz: http://localhost:${PORT}`);
+    console.log(`✓ Admin: http://localhost:${PORT}/admin`);
+  });
+}
+
+// Export the Express API for Vercel Serverless Functions
+module.exports = app;
