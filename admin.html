@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Timepass Responses</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(160deg, #0d3b2b, #155e3b);
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      h1 {
+        color: #a52a2a;
+        margin-bottom: 5px;
+        margin-top: 0;
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #6b7280;
+        font-size: 13px;
+        margin-bottom: 25px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: auto;
+        gap: 20px;
+        margin: 30px 0 35px;
+        justify-content: center;
+      }
+
+      .stat-card {
+        background: linear-gradient(135deg, #f3f4f6 0%, #ffffff 100%);
+        padding: 20px 35px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid #e5e7eb;
+        border-left: 4px solid #a52a2a;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+
+      .stat-card .number {
+        font-size: 32px;
+        font-weight: 700;
+        color: #a52a2a;
+        margin: 0;
+        line-height: 1;
+      }
+
+      .stat-card .label {
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 8px;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+      }
+
+      .controls {
+        margin: 0 0 35px;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      button {
+        background: #a52a2a;
+        color: white;
+        border: none;
+        padding: 11px 22px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      button:hover {
+        background: #8b0000;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .responses-container {
+        margin-top: 10px;
+      }
+
+      .responses-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 16px;
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .user-item {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 0;
+        margin-bottom: 12px;
+        border-left: 4px solid #a52a2a;
+        overflow: hidden;
+        transition: all 0.2s ease;
+      }
+
+      .user-item:hover {
+        border-color: #d1d5db;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .user-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.15s ease;
+      }
+
+      .user-header:hover {
+        background: #f9fafb;
+      }
+
+      .user-name {
+        font-weight: 700;
+        font-size: 15px;
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        padding: 6px 14px;
+        border-radius: 20px;
+        color: white;
+        flex-shrink: 0;
+      }
+
+      .user-toggle {
+        font-size: 18px;
+        color: #6b7280;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+      }
+
+      .user-toggle.expanded {
+        transform: rotate(180deg);
+        color: #a52a2a;
+      }
+
+      .user-info {
+        font-size: 12px;
+        color: #6b7280;
+        flex-grow: 1;
+        text-align: right;
+        margin-right: 20px;
+      }
+
+      .response-item {
+        background: #f9fafb;
+        border: none;
+        border-radius: 0;
+        padding: 20px;
+        margin: 0;
+        border-left: 0;
+        border-top: 1px solid #e5e7eb;
+        display: none;
+      }
+
+      .response-item.expanded {
+        display: block;
+      }
+
+      .response-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 18px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .response-id {
+        font-weight: 700;
+        font-size: 12px;
+        color: #a52a2a;
+        letter-spacing: 0.3px;
+      }
+
+      .response-time {
+        font-size: 12px;
+        color: #6b7280;
+        margin-left: auto;
+      }
+
+      .response-answers {
+        display: grid;
+        gap: 12px;
+      }
+
+      .answer {
+        background: white;
+        padding: 12px 14px;
+        border-radius: 6px;
+        border-left: 3px solid #22c55e;
+        transition: box-shadow 0.2s ease;
+      }
+
+      .answer:hover {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+
+      .answer-question {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 6px;
+        font-size: 13px;
+        text-transform: none;
+      }
+
+      .answer-text {
+        color: #4b5563;
+        font-size: 13px;
+        padding-left: 0;
+        border-left: none;
+        line-height: 1.5;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 50px 30px;
+        color: #9ca3af;
+        background: #fafafa;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+      }
+
+      .empty-state-icon {
+        font-size: 40px;
+        margin-bottom: 12px;
+      }
+
+      .empty-state-text {
+        font-size: 14px;
+        color: #6b7280;
+        line-height: 1.6;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 40px;
+        color: #6b7280;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📊 Timepass Quiz Admin Dashboard</h1>
+      <p class="subtitle">Track responses and see what people really think</p>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="number" id="totalResponses">0</div>
+          <div class="label">Total Responses</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button onclick="loadResponses()">🔄 Refresh</button>
+        <button onclick="exportData()">📥 Export CSV</button>
+      </div>
+
+      <span class="responses-label" id="responsesLabel"></span>
+
+      <div class="responses-container" id="responses">
+        <div class="loading">Loading responses...</div>
+      </div>
+    </div>
+
+    <script>
+      async function loadResponses() {
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/admin/answers",
+          );
+          const data = await response.json();
+
+          displayStats(data);
+          displayResponses(data);
+        } catch (error) {
+          document.getElementById("responses").innerHTML =
+            '<div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-text">Can\'t connect to server.<br>Make sure it\'s running with <code>npm start</code></div></div>';
+        }
+      }
+
+      function displayStats(data) {
+        // Count unique users
+        const userSet = new Set();
+        data.forEach((item) => {
+          userSet.add(item.name || "Anonymous");
+        });
+        const uniqueUsers = userSet.size;
+
+        document.getElementById("totalResponses").textContent = uniqueUsers;
+
+        // Update responses label
+        const label = document.getElementById("responsesLabel");
+        if (uniqueUsers === 0) {
+          label.textContent = "";
+        } else if (uniqueUsers === 1) {
+          label.textContent = "1 response";
+        } else {
+          label.textContent = uniqueUsers + " responses";
+        }
+      }
+
+      function displayResponses(data) {
+        if (data.length === 0) {
+          document.getElementById("responses").innerHTML =
+            '<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">No responses yet.<br>Share the quiz link to get started.</div></div>';
+          return;
+        }
+
+        // Group data by user name (keep only latest response per user)
+        const userMap = {};
+        data.forEach((item) => {
+          const userName = item.name || "Anonymous";
+          if (
+            !userMap[userName] ||
+            new Date(item.timestamp) > new Date(userMap[userName].timestamp)
+          ) {
+            userMap[userName] = item;
+          }
+        });
+
+        const uniqueUsers = Object.values(userMap);
+
+        const html = uniqueUsers
+          .map((item, index) => {
+            const userName = item.name || "Anonymous";
+            return `
+        <div class="user-item" data-user-index="${index}">
+          <div class="user-header" onclick="toggleUser(${index})">
+            <div class="user-name">👤 ${userName}</div>
+            <div class="user-info">${new Date(item.timestamp).toLocaleString()}</div>
+            <div class="user-toggle" id="toggle-${index}">▼</div>
+          </div>
+          <div class="response-item" id="response-${index}">
+            <div class="response-header">
+              <div class="response-id">ID #${item.id}</div>
+              <div class="response-time">${new Date(item.timestamp).toLocaleString()}</div>
+            </div>
+            <div class="response-answers">
+              ${Object.entries(item.answers)
+                .map(
+                  ([q, a]) =>
+                    `
+                <div class="answer">
+                  <div class="answer-question">${q}</div>
+                  <div class="answer-text">${a}</div>
+                </div>
+              `,
+                )
+                .join("")}
+            </div>
+          </div>
+        </div>
+      `;
+          })
+          .join("");
+
+        document.getElementById("responses").innerHTML = html;
+      }
+
+      function toggleUser(index) {
+        const responseItem = document.getElementById(`response-${index}`);
+        const toggle = document.getElementById(`toggle-${index}`);
+        responseItem.classList.toggle("expanded");
+        toggle.classList.toggle("expanded");
+      }
+
+      function exportData() {
+        fetch("http://localhost:3000/api/admin/answers")
+          .then((res) => res.json())
+          .then((data) => {
+            let csv = "ID,Name,Timestamp,Question,Answer\n";
+            data.forEach((item) => {
+              Object.entries(item.answers).forEach(([q, a]) => {
+                csv += `${item.id},"${item.name || "Anonymous"}","${item.timestamp}","${q}","${a}"\n`;
+              });
+            });
+
+            const blob = new Blob([csv], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "timepass_responses.csv";
+            a.click();
+          });
+      }
+
+      // Load on page load
+      loadResponses();
+      // Refresh every 5 seconds
+      setInterval(loadResponses, 5000);
+    </script>
+  </body>
+</html>

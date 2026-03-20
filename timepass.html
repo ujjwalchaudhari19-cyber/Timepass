@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="timepass.css" />
+    <title>timepass</title>
+  </head>
+  <body>
+    <section class="name-screen" id="nameScreen">
+      <div class="name-container">
+        <h2>Welcome!</h2>
+        <p>Enter your name to continue</p>
+        <input
+          type="text"
+          id="nameInput"
+          class="name-input"
+          placeholder="Your name..."
+          autocomplete="off"
+        />
+        <button class="name-button" onclick="startQuiz()">Let's Go!</button>
+      </div>
+    </section>
+
+    <section class="hero" id="hero" style="display: none">
+      <h1>Hello this is a timepass page made by Ujjwal</h1>
+    </section>
+
+    <main class="questions" id="questions" style="display: none">
+      <section class="question-card">
+        <p>Do you think I am boring??</p>
+        <div class="option-group">
+          <button class="button">Yes</button>
+          <button class="button">No</button>
+          <button class="button">Not sure</button>
+        </div>
+      </section>
+
+      <section class="question-card">
+        <p>What do you like in me??</p>
+        <div class="option-group">
+          <button class="button">Personality</button>
+          <button class="button">Humor</button>
+          <button class="button">Looks</button>
+          <button class="button">Nothing</button>
+        </div>
+      </section>
+
+      <section class="question-card">
+        <p>What's my favourite sport??</p>
+        <div class="option-group">
+          <button class="button">Cricket</button>
+          <button class="button">Football</button>
+          <button class="button">Basketball</button>
+          <button class="button">Badminton</button>
+        </div>
+      </section>
+
+      <section class="question-card">
+        <p>What vibe do I give off most of the time?</p>
+        <div class="option-group">
+          <button class="button">Chill</button>
+          <button class="button">Chaotic</button>
+          <button class="button">Mysterious</button>
+          <button class="button">Wanna be</button>
+        </div>
+      </section>
+
+      <section class="question-card">
+        <p>What's my most annoying trait?</p>
+        <div class="option-group">
+          <button class="button">Laziness</button>
+          <button class="button">Overthinking</button>
+          <button class="button">Procrastination</button>
+          <button class="button">Says wrong thing at wrong time</button>
+        </div>
+      </section>
+
+      <section class="question-card">
+        <p>What's my default mood?</p>
+        <div class="option-group">
+          <button class="button">Calm</button>
+          <button class="button">Irritated</button>
+          <button class="button">Overthinking</button>
+          <button class="button">Random energy</button>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      let userName = "";
+      const userAnswers = {};
+
+      function startQuiz() {
+        const nameInput = document.getElementById("nameInput").value.trim();
+        if (!nameInput) {
+          alert("Please enter your name!");
+          return;
+        }
+
+        // Check if admin access
+        if (nameInput.toLowerCase() === "ujju") {
+          window.location.href = "http://localhost:3000/admin";
+          return;
+        }
+
+        userName = nameInput;
+        localStorage.setItem("userName", userName);
+
+        document.getElementById("nameScreen").style.display = "none";
+        document.getElementById("hero").style.display = "block";
+        document.getElementById("questions").style.display = "grid";
+
+        initializeQuiz();
+      }
+
+      function initializeQuiz() {
+        document.querySelectorAll(".button").forEach((button) => {
+          button.addEventListener("click", function () {
+            const questionCard = this.closest(".question-card");
+            const questionText = questionCard.querySelector("p").textContent;
+
+            // Prevent changing answer if already answered this question
+            if (userAnswers[questionText]) {
+              alert(
+                "You already answered this question. You can only answer each question once!",
+              );
+              return;
+            }
+
+            const answer = this.textContent.trim();
+            userAnswers[questionText] = answer;
+
+            // Check if first question and answer is "Yes"
+            if (
+              questionText === "Do you think I am boring??" &&
+              answer === "Yes"
+            ) {
+              alert("You think i am boring!! 😢");
+            }
+
+            // Check if first question and answer is "No"
+            if (
+              questionText === "Do you think I am boring??" &&
+              answer === "No"
+            ) {
+              alert("You are the og");
+            }
+
+            // Check if first question and answer is "Not sure"
+            if (
+              questionText === "Do you think I am boring??" &&
+              answer === "Not sure"
+            ) {
+              alert("You are not sure? Really!! 🤔");
+            }
+
+            // Check if second question and answer is "Personality"
+            if (
+              questionText === "What do you like in me??" &&
+              answer === "Personality"
+            ) {
+              alert("Hmm you think i am a gentle man 🥰");
+            }
+
+            // Check if second question and answer is "Humor"
+            if (
+              questionText === "What do you like in me??" &&
+              answer === "Humor"
+            ) {
+              alert("You think I am comedian 😂");
+            }
+
+            // Check if second question and answer is "Looks"
+            if (
+              questionText === "What do you like in me??" &&
+              answer === "Looks"
+            ) {
+              alert("I know I am goodlooking 😎");
+            }
+
+            // Check if second question and answer is "Nothing"
+            if (
+              questionText === "What do you like in me??" &&
+              answer === "Nothing"
+            ) {
+              alert("You ungrateful potato 🥔");
+            }
+
+            // Check if third question and answer is "Cricket"
+            if (
+              questionText === "What's my favourite sport??" &&
+              answer === "Cricket"
+            ) {
+              alert("Yeah i like to watch it and sometimes to play 🏏");
+            }
+
+            // Check if third question and answer is "Football"
+            if (
+              questionText === "What's my favourite sport??" &&
+              answer === "Football"
+            ) {
+              alert("You know nothing about me ⚽");
+            }
+
+            // Check if third question and answer is "Basketball"
+            if (
+              questionText === "What's my favourite sport??" &&
+              answer === "Basketball"
+            ) {
+              alert("You moron do you think i like basketball 🤦");
+            }
+
+            // Check if third question and answer is "Badminton"
+            if (
+              questionText === "What's my favourite sport??" &&
+              answer === "Badminton"
+            ) {
+              alert("Chlo fir badmintion khelne court me 🏸");
+            }
+
+            // Check if fourth question and answer is "Chill"
+            if (
+              questionText === "What vibe do I give off most of the time?" &&
+              answer === "Chill"
+            ) {
+              alert("Yeah I am just a chill guy 😎");
+            }
+
+            // Check if fourth question and answer is "Chaotic"
+            if (
+              questionText === "What vibe do I give off most of the time?" &&
+              answer === "Chaotic"
+            ) {
+              alert("Hehehe 😝");
+            }
+
+            // Check if fourth question and answer is "Mysterious"
+            if (
+              questionText === "What vibe do I give off most of the time?" &&
+              answer === "Mysterious"
+            ) {
+              alert("I am batman 🦇");
+            }
+
+            // Check if fourth question and answer is "Wanna be"
+            if (
+              questionText === "What vibe do I give off most of the time?" &&
+              answer === "Wanna be"
+            ) {
+              alert("😭");
+            }
+
+            // Check if fifth question and answer is "Laziness"
+            if (
+              questionText === "What's my most annoying trait?" &&
+              answer === "Laziness"
+            ) {
+              alert("🥱");
+            }
+
+            // Check if fifth question and answer is "Overthinking"
+            if (
+              questionText === "What's my most annoying trait?" &&
+              answer === "Overthinking"
+            ) {
+              alert("Uska message nhi aaya 😭");
+            }
+
+            // Check if fifth question and answer is "Procrastination"
+            if (
+              questionText === "What's my most annoying trait?" &&
+              answer === "Procrastination"
+            ) {
+              alert("Aaj kre so kal kr kal kre so parso 😏");
+            }
+
+            // Check if fifth question and answer is "Says wrong thing at wrong time"
+            if (
+              questionText === "What's my most annoying trait?" &&
+              answer === "Says wrong thing at wrong time"
+            ) {
+              alert("👉👈");
+            }
+
+            // Check if sixth question and answer is "Calm"
+            if (
+              questionText === "What's my default mood?" &&
+              answer === "Calm"
+            ) {
+              alert("Calm just like a hailstorm ⛈️");
+            }
+
+            // Check if sixth question and answer is "Irritated"
+            if (
+              questionText === "What's my default mood?" &&
+              answer === "Irritated"
+            ) {
+              alert("You are the reason I am irritated 😤");
+            }
+
+            // Check if sixth question and answer is "Overthinking"
+            if (
+              questionText === "What's my default mood?" &&
+              answer === "Overthinking"
+            ) {
+              alert("Nhi hu yaar overthinker(Jhoot bol rha hu hehe) 😂");
+            }
+
+            // Check if sixth question and answer is "Random energy"
+            if (
+              questionText === "What's my default mood?" &&
+              answer === "Random energy"
+            ) {
+              alert("I am just a lovely guy 😇");
+            }
+
+            this.classList.add("selected");
+            // Disable all buttons in this question after selection
+            const siblings = this.parentElement.querySelectorAll(".button");
+            siblings.forEach((btn) => {
+              btn.disabled = true;
+            });
+
+            sendAnswers();
+          });
+        });
+      }
+
+      function sendAnswers() {
+        fetch("http://localhost:3000/api/submit-answers", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: userName,
+            answers: userAnswers,
+            timestamp: new Date().toISOString(),
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.success) {
+              alert("⚠️ " + data.message);
+            }
+          })
+          .catch((err) => console.log("Server not running yet"));
+      }
+
+      // Allow Enter key to submit name
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("nameInput")
+          .addEventListener("keypress", (e) => {
+            if (e.key === "Enter") startQuiz();
+          });
+      });
+    </script>
+  </body>
+</html>
