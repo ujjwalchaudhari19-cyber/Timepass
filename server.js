@@ -6,13 +6,13 @@ const path = require("path");
 
 const app = express();
 const PORT = 3000;
-const DATA_FILE = path.join(__dirname, "answers.json");
+const DATA_FILE = process.env.VERCEL ? path.join('/tmp', 'answers.json') : path.join(__dirname, "answers.json");
 
 app.use(cors());
 app.use(bodyParser.json());
 
 // Serve static files
-app.use(express.static(path.join(__dirname, ".vscode")));
+app.use(express.static(__dirname));
 
 // Ensure answers.json exists
 if (!fs.existsSync(DATA_FILE)) {
@@ -29,13 +29,15 @@ app.post("/api/submit-answers", (req, res) => {
   const userName = name || "Anonymous";
 
   // Check if this user already submitted
-  const existingUserIndex = allAnswers.findIndex(item => item.name === userName);
+  const existingUserIndex = allAnswers.findIndex(
+    (item) => item.name === userName,
+  );
 
   if (existingUserIndex !== -1) {
     // User already submitted - update their answers instead of rejecting
     allAnswers[existingUserIndex].answers = {
       ...allAnswers[existingUserIndex].answers,
-      ...answers
+      ...answers,
     };
     allAnswers[existingUserIndex].timestamp = timestamp;
   } else {
@@ -44,7 +46,7 @@ app.post("/api/submit-answers", (req, res) => {
       id: allAnswers.length + 1,
       name: userName,
       answers,
-      timestamp
+      timestamp,
     });
   }
 
@@ -62,12 +64,12 @@ app.get("/api/admin/answers", (req, res) => {
 
 // Serve admin page
 app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, ".vscode", "admin.html"));
+  res.sendFile(path.join(__dirname, "admin.html"));
 });
 
 // Serve main page
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, ".vscode", "timepass.html"));
+  res.sendFile(path.join(__dirname, "timepass.html"));
 });
 
 app.listen(PORT, () => {
