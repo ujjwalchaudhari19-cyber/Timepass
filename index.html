@@ -100,7 +100,7 @@
 
         // Check if admin access
         if (nameInput.toLowerCase() === "ujju") {
-          window.location.href = "http://localhost:3000/admin";
+          window.location.href = "/admin.html";
           return;
         }
 
@@ -328,7 +328,7 @@
       }
 
       function sendAnswers() {
-        fetch("http://localhost:3000/api/submit-answers", {
+        fetch("/api/submit-answers", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

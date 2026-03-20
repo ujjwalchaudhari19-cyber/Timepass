@@ -310,7 +310,7 @@
       async function loadResponses() {
         try {
           const response = await fetch(
-            "http://localhost:3000/api/admin/answers",
+            "/api/admin-answers",
           );
           const data = await response.json();
 
@@ -409,7 +409,7 @@
       }
 
       function exportData() {
-        fetch("http://localhost:3000/api/admin/answers")
+        fetch("/api/admin-answers")
           .then((res) => res.json())
           .then((data) => {
             let csv = "ID,Name,Timestamp,Question,Answer\n";
